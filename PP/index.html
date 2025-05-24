@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthTech - Your Complete Wellness Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(26, 26, 46, 0.15);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.6rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            transform: translateY(-1px);
+        }
+
+        main {
+            margin-top: 80px;
+            padding: 4rem 0;
+        }
+
+        .hero {
+            margin-top: 8%;
+            text-align: center;
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 20%;
+            right: 10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 0, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff, #00ff88, #ffaa00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 3s ease-in-out infinite alternate;
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes glow {
+            from { 
+                filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
+                transform: scale(1);
+            }
+            to { 
+                filter: drop-shadow(0 0 40px rgba(255, 0, 255, 0.6));
+                transform: scale(1.02);
+            }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            font-weight: 300;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 6rem;
+        }
+
+        .feature-card {
+            background: rgba(26, 26, 46, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 212, 255, 0.1), rgba(255, 0, 255, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: rgba(0, 212, 255, 0.5);
+            box-shadow: 0 25px 50px rgba(0, 212, 255, 0.2), 0 0 50px rgba(255, 0, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #ff00ff, #00d4ff);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            opacity: 1;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 212, 255, 0.4);
+        }
+
+        .stats-section {
+            margin-top: 6rem;
+            text-align: center;
+            padding: 4rem 0;
+            background: rgba(26, 26, 46, 0.2);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 212, 255, 0.1), transparent, rgba(255, 0, 255, 0.1), transparent);
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .stats-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            padding: 1.5rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            opacity: 0.8;
+            margin-top: 0.5rem;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .feature-card {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">HealthTech</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="posture-checker.html">Posture</a></li>
+                <li><a href="bmi-calculator.html">BMI</a></li>
+                <li><a href="water-tracker.html">Water</a></li>
+                <li><a href="exercise-timer.html">Exercise</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Your Complete Wellness Journey</h1>
+            <p>Advanced health tools powered by AI to monitor, track, and transform your daily wellness habits with precision and style</p>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Health Dashboard</h3>
+                <p>Comprehensive analytics with beautiful visualizations, real-time progress tracking, and intelligent insights to guide your wellness journey.</p>
+                <a href="dashboard.html" class="btn">View Dashboard</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🏃‍♂️</div>
+                <h3>Posture Checker</h3>
+                <p>AI-powered real-time posture analysis using advanced computer vision to improve spinal health and reduce back pain effectively.</p>
+                <a href="posture-checker.html" class="btn">Check Posture</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚖️</div>
+                <h3>BMI Calculator</h3>
+                <p>Calculate your Body Mass Index with precision and receive personalized health recommendations based on your unique profile.</p>
+                <a href="bmi-calculator.html" class="btn">Calculate BMI</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💧</div>
+                <h3>Water Tracker</h3>
+                <p>Smart hydration monitoring with intelligent reminders, progress visualization, and personalized hydration goals.</p>
+                <a href="water-tracker.html" class="btn">Track Water</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⏱️</div>
+                <h3>Exercise Timer</h3>
+                <p>Comprehensive workout timers, guided breathing exercises, and meditation sessions for complete mind-body wellness.</p>
+                <a href="exercise-timer.html" class="btn">Start Exercise</a>
+            </div>
+        </section>
+
+        <section class="stats-section">
+            <h2>Your Health at a Glance</h2>
+            <p style="font-size: 1.1rem; opacity: 0.8; margin-bottom: 2rem; font-weight: 300;">Real-time insights into your wellness journey</p>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="dailySteps">0</div>
+                    <div class="stat-label">Steps Today</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="waterIntake">0</div>
+                    <div class="stat-label">Glasses of Water</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="exerciseTime">0</div>
+                    <div class="stat-label">Minutes Exercised</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="postureScore">--</div>
+                    <div class="stat-label">Posture Score</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Load and display stats from localStorage
+        function loadStats() {
+            const waterIntake = localStorage.getItem('waterIntake') || 0;
+            const exerciseTime = localStorage.getItem('totalExerciseTime') || 0;
+            const postureScore = localStorage.getItem('lastPostureScore') || '--';
+            const steps = Math.floor(Math.random() * 5000) + 3000; // Simulated steps
+
+            document.getElementById('dailySteps').textContent = steps.toLocaleString();
+            document.getElementById('waterIntake').textContent = waterIntake;
+            document.getElementById('exerciseTime').textContent = Math.floor(exerciseTime / 60);
+            document.getElementById('postureScore').textContent = postureScore;
+        }
+
+        // Animate numbers on load
+        function animateNumbers() {
+            const numbers = document.querySelectorAll('.stat-number');
+            numbers.forEach(num => {
+                const target = parseInt(num.textContent.replace(/,/g, '')) || 0;
+                if (target > 0) {
+                    let current = 0;
+                    const increment = target / 50;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            current = target;
+                            clearInterval(timer);
+                        }
+                        num.textContent = Math.floor(current).toLocaleString();
+                    }, 30);
+                }
+            });
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStats();
+            setTimeout(animateNumbers, 500);
+
+            // Animate feature cards on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.8s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.8s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

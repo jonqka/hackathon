@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise Timer - HealthTech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(26, 26, 46, 0.15);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.6rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            transform: translateY(-1px);
+        }
+
+        main {
+            padding: 2rem 0;
+        }
+
+        .page-title {
+            margin-top: 8%;
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .page-title::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .page-title h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .page-title p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        .exercise-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .tab-btn {
+            background: rgba(26, 26, 46, 0.5);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tab-btn.active::before {
+            opacity: 1;
+        }
+
+        .tab-btn.active {
+            border-color: transparent;
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .tab-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .timer-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(26, 26, 46, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 212, 255, 0.05), rgba(255, 0, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .timer-container:hover::before {
+            opacity: 1;
+        }
+
+        .timer-container h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #00d4ff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timer-display {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2.5rem;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #ff00ff, #00d4ff);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .control-btn:hover::before {
+            opacity: 1;
+        }
+
+        .control-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 212, 255, 0.4);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .control-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .preset-times {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .preset-btn {
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            padding: 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preset-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .preset-btn:hover::before {
+            opacity: 1;
+        }
+
+        .preset-btn:hover {
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .preset-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .custom-time {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .custom-time input {
+            width: 90px;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            text-align: center;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .custom-time input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .breathing-guide {
+            margin-top: 2.5rem;
+            padding: 2.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .breathing-circle {
+            width: 220px;
+            height: 220px;
+            margin: 2.5rem auto;
+            border: 4px solid #00d4ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            transition: all 4s ease-in-out;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .breathing-circle.inhale {
+            transform: scale(1.3);
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.2), transparent);
+            border-color: #ff00ff;
+        }
+
+        .breathing-circle.exhale {
+            transform: scale(0.8);
+            background: radial-gradient(circle, rgba(255, 0, 255, 0.2), transparent);
+            border-color: #00d4ff;
+        }
+
+        .workout-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .workout-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workout-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 212, 255, 0.1), rgba(255, 0, 255, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .workout-item:hover::before {
+            opacity: 1;
+        }
+
+        .workout-item:hover {
+            border-color: rgba(0, 212, 255, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .workout-item h4 {
+            margin-bottom: 0.8rem;
+            color: #00d4ff;
+            font-weight: 700;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .workout-item p {
+            opacity: 0.8;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.8rem;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            opacity: 0.8;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .timer-display {
+                font-size: 3.5rem;
+            }
+            
+            .timer-controls {
+                flex-direction: column;
+            }
+            
+            .exercise-tabs {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .page-title h1 {
+                font-size: 2.5rem;
+            }
+
+            .timer-container {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">HealthTech</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="posture-checker.html">Posture</a></li>
+                <li><a href="bmi-calculator.html">BMI</a></li>
+                <li><a href="water-tracker.html">Water</a></li>
+                <li><a href="exercise-timer.html">Exercise</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-title">
+            <h1>Exercise Timer</h1>
+            <p>Workout timers, breathing exercises, and meditation sessions for complete wellness</p>
+        </div>
+
+        <div class="exercise-tabs">
+            <button class="tab-btn active" onclick="switchTab('workout')"><span>Workout Timer</span></button>
+            <button class="tab-btn" onclick="switchTab('breathing')"><span>Breathing Exercise</span></button>
+            <button class="tab-btn" onclick="switchTab('meditation')"><span>Meditation</span></button>
+        </div>
+
+        <!-- Workout Timer Tab -->
+        <div id="workout" class="tab-content active">
+            <div class="timer-container">
+                <h3>Workout Timer</h3>
+                <div class="timer-display" id="workoutTimer">00:00</div>
+                
+                <div class="preset-times">
+                    <button class="preset-btn" onclick="setWorkoutTime(5)"><span>5 min</span></button>
+                    <button class="preset-btn" onclick="setWorkoutTime(10)"><span>10 min</span></button>
+                    <button class="preset-btn" onclick="setWorkoutTime(15)"><span>15 min</span></button>
+                    <button class="preset-btn" onclick="setWorkoutTime(20)"><span>20 min</span></button>
+                    <button class="preset-btn" onclick="setWorkoutTime(30)"><span>30 min</span></button>
+                    <button class="preset-btn" onclick="setWorkoutTime(45)"><span>45 min</span></button>
+                </div>
+
+                <div class="custom-time">
+                    <span style="font-weight: 600;">Custom:</span>
+                    <input type="number" id="customMinutes" placeholder="Min" min="1" max="120">
+                    <span style="font-weight: 600;">:</span>
+                    <input type="number" id="customSeconds" placeholder="Sec" min="0" max="59">
+                    <button class="preset-btn" onclick="setCustomWorkoutTime()"><span>Set</span></button>
+                </div>
+
+                <div class="timer-controls">
+                    <button class="control-btn" id="workoutStartBtn" onclick="startWorkout()"><span>Start</span></button>
+                    <button class="control-btn" id="workoutPauseBtn" onclick="pauseWorkout()" disabled><span>Pause</span></button>
+                    <button class="control-btn" id="workoutResetBtn" onclick="resetWorkout()"><span>Reset</span></button>
+                </div>
+
+                <div class="workout-list">
+                    <div class="workout-item" onclick="startQuickWorkout('pushups', 60)">
+                        <h4>💪 Push-ups</h4>
+                        <p>1 minute intense upper body session</p>
+                    </div>
+                    <div class="workout-item" onclick="startQuickWorkout('squats', 90)">
+                        <h4>🦵 Squats</h4>
+                        <p>90 seconds powerful leg workout</p>
+                    </div>
+                    <div class="workout-item" onclick="startQuickWorkout('plank', 60)">
+                        <h4>🏋️ Plank</h4>
+                        <p>1 minute core strength challenge</p>
+                    </div>
+                    <div class="workout-item" onclick="startQuickWorkout('jumping-jacks', 120)">
+                        <h4>🤸 Jumping Jacks</h4>
+                        <p>2 minutes high-energy cardio</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Breathing Exercise Tab -->
+        <div id="breathing" class="tab-content">
+            <div class="timer-container">
+                <h3>Breathing Exercise</h3>
+                <div class="timer-display" id="breathingTimer">04:00</div>
+                
+                <div class="breathing-guide">
+                    <div class="breathing-circle" id="breathingCircle">
+                        <span id="breathingText">Ready</span>
+                    </div>
+                    <p id="breathingInstructions" style="font-weight: 500; opacity: 0.8;">Click start to begin your breathing exercise</p>
+                </div>
+
+                <div class="preset-times">
+                    <button class="preset-btn" onclick="setBreathingTime(2)"><span>2 min</span></button>
+                    <button class="preset-btn" onclick="setBreathingTime(4)"><span>4 min</span></button>
+                    <button class="preset-btn" onclick="setBreathingTime(6)"><span>6 min</span></button>
+                    <button class="preset-btn" onclick="setBreathingTime(10)"><span>10 min</span></button>
+                </div>
+
+                <div class="timer-controls">
+                    <button class="control-btn" id="breathingStartBtn" onclick="startBreathing()"><span>Start</span></button>
+                    <button class="control-btn" id="breathingPauseBtn" onclick="pauseBreathing()" disabled><span>Pause</span></button>
+                    <button class="control-btn" id="breathingResetBtn" onclick="resetBreathing()"><span>Reset</span></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meditation Tab -->
+        <div id="meditation" class="tab-content">
+            <div class="timer-container">
+                <h3>Meditation Timer</h3>
+                <div class="timer-display" id="meditationTimer">05:00</div>
+                
+                <div class="preset-times">
+                    <button class="preset-btn" onclick="setMeditationTime(3)"><span>3 min</span></button>
+                    <button class="preset-btn" onclick="setMeditationTime(5)"><span>5 min</span></button>
+                    <button class="preset-btn" onclick="setMeditationTime(10)"><span>10 min</span></button>
+                    <button class="preset-btn" onclick="setMeditationTime(15)"><span>15 min</span></button>
+                    <button class="preset-btn" onclick="setMeditationTime(20)"><span>20 min</span></button>
+                    <button class="preset-btn" onclick="setMeditationTime(30)"><span>30 min</span></button>
+                </div>
+
+                <div class="timer-controls">
+                    <button class="control-btn" id="meditationStartBtn" onclick="startMeditation()"><span>Start</span></button>
+                    <button class="control-btn" id="meditationPauseBtn" onclick="pauseMeditation()" disabled><span>Pause</span></button>
+                    <button class="control-btn" id="meditationResetBtn" onclick="resetMeditation()"><span>Reset</span></button>
+                </div>
+
+                <div class="breathing-guide">
+                    <p style="font-weight: 500; opacity: 0.8; line-height: 1.6;">Find a comfortable position, close your eyes, and focus on your breath. Let thoughts come and go without judgment.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-display">
+            <div class="stat-card">
+                <div class="stat-number" id="totalWorkoutTime">0</div>
+                <div class="stat-label">Total Minutes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="workoutSessions">0</div>
+                <div class="stat-label">Sessions Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="breathingSessions">0</div>
+                <div class="stat-label">Breathing Sessions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="meditationSessions">0</div>
+                <div class="stat-label">Meditation Sessions</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let workoutTimer = null;
+        let breathingTimer = null;
+        let meditationTimer = null;
+        let breathingCycle = null;
+        
+        let workoutTime = 0;
+        let breathingTime = 240; // 4 minutes default
+        let meditationTime = 300; // 5 minutes default
+        
+        let workoutRunning = false;
+        let breathingRunning = false;
+        let meditationRunning = false;
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Reset all timers when switching tabs
+            resetWorkout();
+            resetBreathing();
+            resetMeditation();
+        }
+
+        // Workout Timer Functions
+        function setWorkoutTime(minutes) {
+            workoutTime = minutes * 60;
+            updateWorkoutDisplay();
+        }
+
+        function setCustomWorkoutTime() {
+            const minutes = parseInt(document.getElementById('customMinutes').value) || 0;
+            const seconds = parseInt(document.getElementById('customSeconds').value) || 0;
+            workoutTime = minutes * 60 + seconds;
+            updateWorkoutDisplay();
+        }
+
+        function updateWorkoutDisplay() {
+            const minutes = Math.floor(workoutTime / 60);
+            const seconds = workoutTime % 60;
+            document.getElementById('workoutTimer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startWorkout() {
+            if (workoutTime <= 0) {
+                alert('Please set a workout time first');
+                return;
+            }
+            
+            workoutRunning = true;
+            document.getElementById('workoutStartBtn').disabled = true;
+            document.getElementById('workoutPauseBtn').disabled = false;
+            
+            workoutTimer = setInterval(() => {
+                workoutTime--;
+                updateWorkoutDisplay();
+                
+                if (workoutTime <= 0) {
+                    completeWorkout();
+                }
+            }, 1000);
+        }
+
+        function pauseWorkout() {
+            workoutRunning = false;
+            clearInterval(workoutTimer);
+            document.getElementById('workoutStartBtn').disabled = false;
+            document.getElementById('workoutPauseBtn').disabled = true;
+        }
+
+        function resetWorkout() {
+            workoutRunning = false;
+            clearInterval(workoutTimer);
+            workoutTime = 0;
+            updateWorkoutDisplay();
+            document.getElementById('workoutStartBtn').disabled = false;
+            document.getElementById('workoutPauseBtn').disabled = true;
+        }
+
+        function completeWorkout() {
+            workoutRunning = false;
+            clearInterval(workoutTimer);
+            document.getElementById('workoutStartBtn').disabled = false;
+            document.getElementById('workoutPauseBtn').disabled = true;
+            
+            // Save workout data
+            const totalTime = parseInt(localStorage.getItem('totalExerciseTime')) || 0;
+            const sessions = parseInt(localStorage.getItem('workoutSessions')) || 0;
+            
+            localStorage.setItem('totalExerciseTime', totalTime + (workoutTime > 0 ? 0 : Math.abs(workoutTime)));
+            localStorage.setItem('workoutSessions', sessions + 1);
+            
+            updateStats();
+            alert('Workout completed! Great job! 💪');
+        }
+
+        function startQuickWorkout(type, seconds) {
+            workoutTime = seconds;
+            updateWorkoutDisplay();
+            startWorkout();
+        }
+
+        // Breathing Exercise Functions
+        function setBreathingTime(minutes) {
+            breathingTime = minutes * 60;
+            updateBreathingDisplay();
+        }
+
+        function updateBreathingDisplay() {
+            const minutes = Math.floor(breathingTime / 60);
+            const seconds = breathingTime % 60;
+            document.getElementById('breathingTimer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startBreathing() {
+            if (breathingTime <= 0) {
+                alert('Please set a breathing time first');
+                return;
+            }
+            
+            breathingRunning = true;
+            document.getElementById('breathingStartBtn').disabled = true;
+            document.getElementById('breathingPauseBtn').disabled = false;
+            
+            startBreathingCycle();
+            
+            breathingTimer = setInterval(() => {
+                breathingTime--;
+                updateBreathingDisplay();
+                
+                if (breathingTime <= 0) {
+                    completeBreathing();
+                }
+            }, 1000);
+        }
+
+        function startBreathingCycle() {
+            const circle = document.getElementById('breathingCircle');
+            const text = document.getElementById('breathingText');
+            const instructions = document.getElementById('breathingInstructions');
+            
+            let isInhaling = true;
+            
+            function cycle() {
+                if (!breathingRunning) return;
+                
+                if (isInhaling) {
+                    text.textContent = 'Inhale';
+                    instructions.textContent = 'Breathe in slowly through your nose...';
+                    circle.classList.remove('exhale');
+                    circle.classList.add('inhale');
+                } else {
+                    text.textContent = 'Exhale';
+                    instructions.textContent = 'Breathe out slowly through your mouth...';
+                    circle.classList.remove('inhale');
+                    circle.classList.add('exhale');
+                }
+                
+                isInhaling = !isInhaling;
+            }
+            
+            cycle(); // Start immediately
+            breathingCycle = setInterval(cycle, 4000); // 4 seconds per phase
+        }
+
+        function pauseBreathing() {
+            breathingRunning = false;
+            clearInterval(breathingTimer);
+            clearInterval(breathingCycle);
+            document.getElementById('breathingStartBtn').disabled = false;
+            document.getElementById('breathingPauseBtn').disabled = true;
+        }
+
+        function resetBreathing() {
+            breathingRunning = false;
+            clearInterval(breathingTimer);
+            clearInterval(breathingCycle);
+            breathingTime = 240;
+            updateBreathingDisplay();
+            
+            const circle = document.getElementById('breathingCircle');
+            const text = document.getElementById('breathingText');
+            const instructions = document.getElementById('breathingInstructions');
+            
+            circle.classList.remove('inhale', 'exhale');
+            text.textContent = 'Ready';
+            instructions.textContent = 'Click start to begin your breathing exercise';
+            
+            document.getElementById('breathingStartBtn').disabled = false;
+            document.getElementById('breathingPauseBtn').disabled = true;
+        }
+
+        function completeBreathing() {
+            breathingRunning = false;
+            clearInterval(breathingTimer);
+            clearInterval(breathingCycle);
+            
+            const sessions = parseInt(localStorage.getItem('breathingSessions')) || 0;
+            localStorage.setItem('breathingSessions', sessions + 1);
+            
+            updateStats();
+            alert('Breathing exercise completed! You should feel more relaxed now. 🧘‍♀️');
+            resetBreathing();
+        }
+
+        // Meditation Timer Functions
+        function setMeditationTime(minutes) {
+            meditationTime = minutes * 60;
+            updateMeditationDisplay();
+        }
+
+        function updateMeditationDisplay() {
+            const minutes = Math.floor(meditationTime / 60);
+            const seconds = meditationTime % 60;
+            document.getElementById('meditationTimer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startMeditation() {
+            if (meditationTime <= 0) {
+                alert('Please set a meditation time first');
+                return;
+            }
+            
+            meditationRunning = true;
+            document.getElementById('meditationStartBtn').disabled = true;
+            document.getElementById('meditationPauseBtn').disabled = false;
+            
+            meditationTimer = setInterval(() => {
+                meditationTime--;
+                updateMeditationDisplay();
+                
+                if (meditationTime <= 0) {
+                    completeMeditation();
+                }
+            }, 1000);
+        }
+
+        function pauseMeditation() {
+            meditationRunning = false;
+            clearInterval(meditationTimer);
+            document.getElementById('meditationStartBtn').disabled = false;
+            document.getElementById('meditationPauseBtn').disabled = true;
+        }
+
+        function resetMeditation() {
+            meditationRunning = false;
+            clearInterval(meditationTimer);
+            meditationTime = 300;
+            updateMeditationDisplay();
+            document.getElementById('meditationStartBtn').disabled = false;
+            document.getElementById('meditationPauseBtn').disabled = true;
+        }
+
+        function completeMeditation() {
+            meditationRunning = false;
+            clearInterval(meditationTimer);
+            
+            const sessions = parseInt(localStorage.getItem('meditationSessions')) || 0;
+            localStorage.setItem('meditationSessions', sessions + 1);
+            
+            updateStats();
+            alert('Meditation session completed! Take a moment to appreciate this peaceful feeling. 🕯️');
+            resetMeditation();
+        }
+
+        // Stats Functions
+        function updateStats() {
+            const totalTime = parseInt(localStorage.getItem('totalExerciseTime')) || 0;
+            const workoutSessions = parseInt(localStorage.getItem('workoutSessions')) || 0;
+            const breathingSessions = parseInt(localStorage.getItem('breathingSessions')) || 0;
+            const meditationSessions = parseInt(localStorage.getItem('meditationSessions')) || 0;
+            
+            document.getElementById('totalWorkoutTime').textContent = Math.floor(totalTime / 60);
+            document.getElementById('workoutSessions').textContent = workoutSessions;
+            document.getElementById('breathingSessions').textContent = breathingSessions;
+            document.getElementById('meditationSessions').textContent = meditationSessions;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateWorkoutDisplay();
+            updateBreathingDisplay();
+            updateMeditationDisplay();
+            updateStats();
+        });
+    </script>
+</body>
+</html>
