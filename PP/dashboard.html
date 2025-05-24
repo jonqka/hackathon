@@ -515,21 +515,6 @@
         });
     </script>
 </body>
-                bar.className = 'chart-bar';
-                const height = Math.random() * 80 + 20; // Random height between 20-100%
-                bar.style.height = height + '%';
-                bar.title = `Day ${i + 1}: ${Math.floor(height)}% activity`;
-                chartContainer.appendChild(bar);
-            }
-        }
-
-        // Initialize dashboard
-        document.addEventListener('DOMContentLoaded', function() {
-            loadDashboardData();
-            
-            // Refresh data every 30 seconds
-            setInterval(loadDashboardData, 30000);
-        });
     </script>
 </body>
 </html>
