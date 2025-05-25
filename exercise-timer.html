@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise Timer - HealthTech</title>
+    <link rel="icon" type="image/x-icon" href="New Project (30).png">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(26, 26, 46, 0.15);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.6rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            transform: translateY(-1px);
+        }
+
+        main {
+            padding: 2rem 0;
+        }
+
+        .page-title {
+            margin-top: 8%;
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .page-title::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .page-title h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .page-title p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        .exercise-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(26, 26, 46, 0.5);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tab-btn.active::before {
+            opacity: 1;
+        }
+
+        .tab-btn.active {
+            border-color: transparent;
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .tab-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .timer-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(26, 26, 46, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 212, 255, 0.05), rgba(255, 0, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .timer-container:hover::before {
+            opacity: 1;
+        }
+
+        .timer-container h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #00d4ff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timer-display {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2.5rem;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #ff00ff, #00d4ff);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .control-btn:hover::before {
+            opacity: 1;
+        }
+
+        .control-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 212, 255, 0.4);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .control-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .preset-times {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .preset-btn {
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            padding: 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preset-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .preset-btn:hover::before {
+            opacity: 1;
+        }
+
+        .preset-btn:hover {
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .preset-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .custom-time {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+
+        .custom-time input {
+            width: 90px;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            text-align: center;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .custom-time input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .breathing-guide {
+            margin-top: 2.5rem;
+            padding: 2.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .breathing-circle {
+            width: 220px;
+            height: 220px;
+            margin: 2.5rem auto;
+            border: 4px solid #00d4ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            transition: all 4s ease-in-out;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .breathing-circle.inhale {
+            transform: scale(1.3);
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.2), transparent);
+            border-color: #ff00ff;
+        }
+
+        .breathing-circle.exhale {
+            transform: scale(0.8);
+            background: radial-gradient(circle, rgba(255, 0, 255, 0.2), transparent);
+            border-color: #00d4ff;
+        }
+
+        .workout-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .workout-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workout-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 212, 255, 0.1), rgba(255, 0, 255, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .workout-item:hover::before {
+            opacity: 1;
+        }
+
+        .workout-item:hover {
+            border-color: rgba(0, 212, 255, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .workout-item h4 {
+            margin-bottom: 0.8rem;
+            color: #00d4ff;
+            font-weight: 700;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .workout-item p {
+            opacity: 0.8;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stretch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stretch-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stretch-item:hover {
+            border-color: rgba(0, 212, 255, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .stretch-item h4 {
+            color: #00d4ff;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .stretch-item .duration {
+            color: #ff00ff;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .stretch-item p {
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        .meditation-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .meditation-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .meditation-card:hover {
+            border-color: rgba(0, 212, 255, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .meditation-card h4 {
+            color: #00d4ff;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .meditation-card p {
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .stats-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.8rem;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            opacity: 0.8;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: rgba(26, 26, 46, 0.2);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+            padding: 3rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 400;
+        }
+
+        .footer-section ul li a:hover {
+            color: #00d4ff;
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 400;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .timer-display {
+                font-size: 3.5rem;
+            }
+            
+            .timer-controls {
+                flex-direction: column;
+            }
+            
+            .exercise-tabs {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .page-title h1 {
+                font-size: 2.5rem;
+            }
+
+            .timer-container {
+                padding: 2rem;
+            }
+
+            /* Footer adjustments for smaller screens */
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                margin-top: 1rem;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">HealthTech</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="posture-checker.html">Posture</a></li>
+                <li><a href="bmi-calculator.html">BMI</a></li>
+                <li><a href="water-tracker.html">Water</a></li>
+                <li><a href="exercise-timer.html">Exercise</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-title">
+            <h1>Exercise Timer</h1>
+            <p>Workout timers, breathing exercises, guided meditations, and desk stretches with automatic voice guidance</p>
+        </div>
+
+        <div class="exercise-tabs">
+            <button class="tab-btn active" onclick="switchTab('workout')"><span>Workout Timer</span></button>
+            <button class="tab-btn" onclick="switchTab('breathing')"><span>Breathing Exercise</span></button>
+            <button class="tab-btn" onclick="switchTab('meditation')"><span>Guided Meditation</span></button>
+            <button class="tab-btn" onclick="switchTab('stretches')"><span>Desk Stretches</span></button>
+        </div>
+
+        <!-- Workout Timer Tab -->
+        <div id="workout" class="tab-content active">
+            <div class="timer-container">
+                <h3>Workout Timer</h3>
+                <div class="timer-display" id="workoutTimer">00:00</div>
+                
+                <div class="preset-times">
+                    <button class="preset-btn" onclick="setWorkoutTime(5)"><span>5 min</span></button>
+                    <button class="preset-btn" onclick="setWorkoutTime(10)"><span>10 min</span></button>
+                    <button class="preset-btn" onclick="setWorkoutTime(15)"><span>15 min</span></button>
+                    <button class="preset-btn" onclick="setWorkoutTime(20)"><span>20 min</span></button>
+                    <button class="preset-btn" onclick="setWorkoutTime(30)"><span>30 min</span></button>
+                    <button class="preset-btn" onclick="setWorkoutTime(45)"><span>45 min</span></button>
+                </div>
+
+                <div class="custom-time">
+                    <span style="font-weight: 600;">Custom:</span>
+                    <input type="number" id="customMinutes" placeholder="Min" min="1" max="120">
+                    <span style="font-weight: 600;">:</span>
+                    <input type="number" id="customSeconds" placeholder="Sec" min="0" max="59">
+                    <button class="preset-btn" onclick="setCustomWorkoutTime()"><span>Set</span></button>
+                </div>
+
+                <div class="timer-controls">
+                    <button class="control-btn" id="workoutStartBtn" onclick="startWorkout()"><span>Start</span></button>
+                    <button class="control-btn" id="workoutPauseBtn" onclick="pauseWorkout()" disabled><span>Pause</span></button>
+                    <button class="control-btn" id="workoutResetBtn" onclick="resetWorkout()"><span>Reset</span></button>
+                </div>
+
+                <div class="workout-list">
+                    <div class="workout-item" onclick="startQuickWorkout('pushups', 60)">
+                        <h4>💪 Push-ups</h4>
+                        <p>1 minute intense upper body session</p>
+                    </div>
+                    <div class="workout-item" onclick="startQuickWorkout('squats', 90)">
+                        <h4>🦵 Squats</h4>
+                        <p>90 seconds powerful leg workout</p>
+                    </div>
+                    <div class="workout-item" onclick="startQuickWorkout('plank', 60)">
+                        <h4>🏋️ Plank</h4>
+                        <p>1 minute core strength challenge</p>
+                    </div>
+                    <div class="workout-item" onclick="startQuickWorkout('jumping-jacks', 120)">
+                        <h4>🤸 Jumping Jacks</h4>
+                        <p>2 minutes high-energy cardio</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Breathing Exercise Tab -->
+        <div id="breathing" class="tab-content">
+            <div class="timer-container">
+                <h3>Breathing Exercise</h3>
+                <div class="timer-display" id="breathingTimer">04:00</div>
+                
+                <div class="breathing-guide">
+                    <div class="breathing-circle" id="breathingCircle">
+                        <span id="breathingText">Ready</span>
+                    </div>
+                    <p id="breathingInstructions" style="font-weight: 500; opacity: 0.8;">Click start to begin your breathing exercise with automatic voice guidance</p>
+                </div>
+
+                <div class="preset-times">
+                    <button class="preset-btn" onclick="setBreathingTime(2)"><span>2 min</span></button>
+                    <button class="preset-btn" onclick="setBreathingTime(4)"><span>4 min</span></button>
+                    <button class="preset-btn" onclick="setBreathingTime(6)"><span>6 min</span></button>
+                    <button class="preset-btn" onclick="setBreathingTime(10)"><span>10 min</span></button>
+                </div>
+
+                <div class="timer-controls">
+                    <button class="control-btn" id="breathingStartBtn" onclick="startBreathing()"><span>Start</span></button>
+                    <button class="control-btn" id="breathingPauseBtn" onclick="pauseBreathing()" disabled><span>Pause</span></button>
+                    <button class="control-btn" id="breathingResetBtn" onclick="resetBreathing()"><span>Reset</span></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meditation Tab -->
+        <div id="meditation" class="tab-content">
+            <div class="timer-container">
+                <h3>Guided Meditation</h3>
+                <div class="timer-display" id="meditationTimer">05:00</div>
+
+                <div class="meditation-options">
+                    <div class="meditation-card" onclick="startGuidedMeditation('mindfulness', 5)">
+                        <h4>🧘‍♀️ Mindfulness</h4>
+                        <p>5-minute present moment awareness with voice guidance</p>
+                    </div>
+                    <div class="meditation-card" onclick="startGuidedMeditation('body-scan', 10)">
+                        <h4>🌊 Body Scan</h4>
+                        <p>10-minute relaxation journey with voice guidance</p>
+                    </div>
+                    <div class="meditation-card" onclick="startGuidedMeditation('stress-relief', 7)">
+                        <h4>😌 Stress Relief</h4>
+                        <p>7-minute tension release with voice guidance</p>
+                    </div>
+                    <div class="meditation-card" onclick="startGuidedMeditation('focus', 15)">
+                        <h4>🎯 Focus</h4>
+                        <p>15-minute concentration boost with voice guidance</p>
+                    </div>
+                </div>
+                
+                <div class="preset-times">
+                    <button class="preset-btn" onclick="setMeditationTime(3)"><span>3 min</span></button>
+                    <button class="preset-btn" onclick="setMeditationTime(5)"><span>5 min</span></button>
+                    <button class="preset-btn" onclick="setMeditationTime(10)"><span>10 min</span></button>
+                    <button class="preset-btn" onclick="setMeditationTime(15)"><span>15 min</span></button>
+                    <button class="preset-btn" onclick="setMeditationTime(20)"><span>20 min</span></button>
+                    <button class="preset-btn" onclick="setMeditationTime(30)"><span>30 min</span></button>
+                </div>
+
+                <div class="timer-controls">
+                    <button class="control-btn" id="meditationStartBtn" onclick="startMeditation()"><span>Start</span></button>
+                    <button class="control-btn" id="meditationPauseBtn" onclick="pauseMeditation()" disabled><span>Pause</span></button>
+                    <button class="control-btn" id="meditationResetBtn" onclick="resetMeditation()"><span>Reset</span></button>
+                </div>
+
+                <div class="breathing-guide">
+                    <p id="meditationGuidance" style="font-weight: 500; opacity: 0.8; line-height: 1.6;">Find a comfortable position, close your eyes, and focus on your breath. Automatic voice guidance will begin when you start.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desk Stretches Tab -->
+        <div id="stretches" class="tab-content">
+            <div class="timer-container">
+                <h3>Desk Stretches</h3>
+                <p style="margin-bottom: 2rem; opacity: 0.8;">Quick stretches to relieve tension and improve posture with automatic voice instructions</p>
+                
+                <div class="stretch-grid">
+                    <div class="stretch-item" onclick="startStretch('neck', 30)">
+                        <h4>🦒 Neck Rolls</h4>
+                        <div class="duration">30 seconds</div>
+                        <p>Gently roll your head in circles to release neck tension. Voice guidance included.</p>
+                    </div>
+                    
+                    <div class="stretch-item" onclick="startStretch('shoulder', 45)">
+                        <h4>🤷‍♀️ Shoulder Shrugs</h4>
+                        <div class="duration">45 seconds</div>
+                        <p>Lift shoulders to ears, hold for 3 seconds, then release. Voice guidance included.</p>
+                    </div>
+                    
+                    <div class="stretch-item" onclick="startStretch('wrist', 60)">
+                        <h4>✋ Wrist Circles</h4>
+                        <div class="duration">1 minute</div>
+                        <p>Rotate wrists in both directions with voice instructions for proper form.</p>
+                    </div>
+                    
+                    <div class="stretch-item" onclick="startStretch('back', 90)">
+                        <h4>🔄 Seated Spinal Twist</h4>
+                        <div class="duration">90 seconds</div>
+                        <p>Sit tall, place hand on opposite knee, and gently twist with voice guidance.</p>
+                    </div>
+                    
+                    <div class="stretch-item" onclick="startStretch('chest', 60)">
+                        <h4>🤗 Chest Opener</h4>
+                        <div class="duration">1 minute</div>
+                        <p>Clasp hands behind back, lift chest with step-by-step voice instructions.</p>
+                    </div>
+                    
+                    <div class="stretch-item" onclick="startStretch('hip', 120)">
+                        <h4>🪑 Hip Flexor Stretch</h4>
+                        <div class="duration">2 minutes</div>
+                        <p>While seated, pull one knee to chest with detailed voice guidance.</p>
+                    </div>
+                </div>
+
+                <div class="timer-controls" style="margin-top: 2rem;">
+                    <button class="control-btn" id="stretchStartBtn" onclick="startStretchTimer()" disabled><span>Start Stretch</span></button>
+                    <button class="control-btn" id="stretchPauseBtn" onclick="pauseStretch()" disabled><span>Pause</span></button>
+                    <button class="control-btn" id="stretchResetBtn" onclick="resetStretch()"><span>Reset</span></button>
+                </div>
+
+                <div class="breathing-guide" id="stretchGuide" style="display: none;">
+                    <div class="timer-display" id="stretchTimer" style="font-size: 3rem; margin-bottom: 1rem;">00:00</div>
+                    <h4 id="stretchName" style="color: #00d4ff; margin-bottom: 1rem;"></h4>
+                    <p id="stretchInstructions" style="font-weight: 500; opacity: 0.8; line-height: 1.6;"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-display">
+            <div class="stat-card">
+                <div class="stat-number" id="totalWorkoutTime">0</div>
+                <div class="stat-label">Total Minutes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="workoutSessions">0</div>
+                <div class="stat-label">Sessions Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="breathingSessions">0</div>
+                <div class="stat-label">Breathing Sessions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="meditationSessions">0</div>
+                <div class="stat-label">Meditation Sessions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stretchSessions">0</div>
+                <div class="stat-label">Stretch Sessions</div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>HealthTech</h4>
+                <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6; font-weight: 400;">Your complete wellness companion powered by AI technology. Track, monitor, and transform your health journey with precision and style.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Health Tools</h4>
+                <ul>
+                    <li><a href="dashboard.html">Health Dashboard</a></li>
+                    <li><a href="posture-checker.html">Posture Checker</a></li>
+                    <li><a href="bmi-calculator.html">BMI Calculator</a></li>
+                    <li><a href="water-tracker.html">Water Tracker</a></li>
+                    <li><a href="exercise-timer.html">Exercise Timer</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Info</h4>
+                <ul>
+                    <li><a href="tel:+1-555-HEALTH">📞 +1 (555) HEALTH</a></li>
+                    <li><a href="mailto:info@healthtech.com">✉️ info@healthtech.com</a></li>
+                    <li><a href="#location">📍 123 Wellness Ave, Health City, HC 12345</a></li>
+                    <li><a href="#hours">🕒 Mon-Fri: 9AM-6PM PST</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                    <li><a href="#help">Help Center</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="social-links">
+                <a href="#facebook" aria-label="Facebook">📘</a>
+                <a href="#twitter" aria-label="Twitter">🐦</a>
+                <a href="#instagram" aria-label="Instagram">📷</a>
+                <a href="#linkedin" aria-label="LinkedIn">💼</a>
+            </div>
+            <p>&copy; 2024 HealthTech. All rights reserved. Made with ❤️ for your wellness journey.</p>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        // Global variables
+        let workoutTimer = null;
+        let breathingTimer = null;
+        let meditationTimer = null;
+        let stretchTimer = null;
+        let breathingCycle = null;
+        let meditationGuidance = null;
+        
+        let workoutTime = 0;
+        let breathingTime = 240; // 4 minutes default
+        let meditationTime = 300; // 5 minutes default
+        let stretchTime = 0;
+        
+        let workoutRunning = false;
+        let breathingRunning = false;
+        let meditationRunning = false;
+        let stretchRunning = false;
+
+        // Voice control variables - automatically enabled
+        let voiceEnabled = true;
+        let meditationVoiceEnabled = true;
+        let stretchVoiceEnabled = true;
+        let currentMeditationType = null;
+        let currentStretch = null;
+
+        // Speech synthesis check and initialization
+        let speechSupported = false;
+        let voices = [];
+
+        function initializeSpeech() {
+            if ('speechSynthesis' in window) {
+                speechSupported = true;
+                console.log('Speech synthesis supported - voice guidance will be automatic');
+                
+                // Load voices
+                function loadVoices() {
+                    voices = speechSynthesis.getVoices();
+                    console.log('Voices loaded:', voices.length);
+                }
+                
+                // Load voices when available
+                if (speechSynthesis.onvoiceschanged !== undefined) {
+                    speechSynthesis.onvoiceschanged = loadVoices;
+                }
+                loadVoices();
+            } else {
+                console.log('Speech synthesis not supported');
+                speechSupported = false;
+            }
+        }
+
+        // Enhanced speak function with better error handling
+        function speak(text, rate = 1, pitch = 1) {
+            if (!speechSupported) {
+                console.log('Speech not supported, text would be:', text);
+                return;
+            }
+
+            try {
+                // Cancel any ongoing speech
+                speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = rate;
+                utterance.pitch = pitch;
+                utterance.volume = 0.8;
+                
+                // Use a female voice if available
+                const femaleVoice = voices.find(voice => 
+                    voice.name.toLowerCase().includes('female') || 
+                    voice.name.toLowerCase().includes('samantha') ||
+                    voice.name.toLowerCase().includes('karen') ||
+                    voice.name.toLowerCase().includes('susan')
+                );
+                
+                if (femaleVoice) {
+                    utterance.voice = femaleVoice;
+                } else if (voices.length > 0) {
+                    utterance.voice = voices[0];
+                }
+                
+                utterance.onstart = () => console.log('Speech started:', text);
+                utterance.onend = () => console.log('Speech ended');
+                utterance.onerror = (e) => console.error('Speech error:', e);
+                
+                speechSynthesis.speak(utterance);
+            } catch (error) {
+                console.error('Error in speak function:', error);
+            }
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Reset all timers when switching tabs
+            resetWorkout();
+            resetBreathing();
+            resetMeditation();
+            resetStretch();
+        }
+
+        // Workout Timer Functions
+        function setWorkoutTime(minutes) {
+            workoutTime = minutes * 60;
+            updateWorkoutDisplay();
+        }
+
+        function setCustomWorkoutTime() {
+            const minutes = parseInt(document.getElementById('customMinutes').value) || 0;
+            const seconds = parseInt(document.getElementById('customSeconds').value) || 0;
+            workoutTime = minutes * 60 + seconds;
+            updateWorkoutDisplay();
+        }
+
+        function updateWorkoutDisplay() {
+            const minutes = Math.floor(workoutTime / 60);
+            const seconds = workoutTime % 60;
+            document.getElementById('workoutTimer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startWorkout() {
+            if (workoutTime <= 0) {
+                alert('Please set a workout time first');
+                return;
+            }
+            
+            workoutRunning = true;
+            document.getElementById('workoutStartBtn').disabled = true;
+            document.getElementById('workoutPauseBtn').disabled = false;
+            
+            speak("Workout timer started. Stay focused and give your best effort!");
+            
+            workoutTimer = setInterval(() => {
+                workoutTime--;
+                updateWorkoutDisplay();
+                
+                // Voice encouragement at intervals
+                if (workoutTime === 30) {
+                    speak("30 seconds remaining. You're doing great!");
+                } else if (workoutTime === 10) {
+                    speak("10 seconds left. Push through!");
+                }
+                
+                if (workoutTime <= 0) {
+                    completeWorkout();
+                }
+            }, 1000);
+        }
+
+        function pauseWorkout() {
+            workoutRunning = false;
+            clearInterval(workoutTimer);
+            speechSynthesis.cancel();
+            document.getElementById('workoutStartBtn').disabled = false;
+            document.getElementById('workoutPauseBtn').disabled = true;
+            speak("Workout paused. Take a moment to rest.");
+        }
+
+        function resetWorkout() {
+            workoutRunning = false;
+            clearInterval(workoutTimer);
+            speechSynthesis.cancel();
+            workoutTime = 0;
+            updateWorkoutDisplay();
+            document.getElementById('workoutStartBtn').disabled = false;
+            document.getElementById('workoutPauseBtn').disabled = true;
+        }
+
+        function completeWorkout() {
+            workoutRunning = false;
+            clearInterval(workoutTimer);
+            speechSynthesis.cancel();
+            document.getElementById('workoutStartBtn').disabled = false;
+            document.getElementById('workoutPauseBtn').disabled = true;
+            
+            // Save workout data
+            const totalTime = parseInt(localStorage.getItem('totalExerciseTime')) || 0;
+            const sessions = parseInt(localStorage.getItem('workoutSessions')) || 0;
+            
+            localStorage.setItem('totalExerciseTime', totalTime + Math.abs(workoutTime));
+            localStorage.setItem('workoutSessions', sessions + 1);
+            
+            updateStats();
+            speak("Excellent work! Your workout is complete. You should feel proud of your effort.");
+            alert('Workout completed! Great job! 💪');
+        }
+
+        function startQuickWorkout(type, seconds) {
+            workoutTime = seconds;
+            updateWorkoutDisplay();
+            speak(`Starting ${type} workout. Get ready to give it your all!`);
+            setTimeout(startWorkout, 2000);
+        }
+
+        // Breathing Exercise Functions
+        function setBreathingTime(minutes) {
+            breathingTime = minutes * 60;
+            updateBreathingDisplay();
+        }
+
+        function updateBreathingDisplay() {
+            const minutes = Math.floor(breathingTime / 60);
+            const seconds = breathingTime % 60;
+            document.getElementById('breathingTimer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startBreathing() {
+            if (breathingTime <= 0) {
+                alert('Please set a breathing time first');
+                return;
+            }
+            
+            breathingRunning = true;
+            document.getElementById('breathingStartBtn').disabled = true;
+            document.getElementById('breathingPauseBtn').disabled = false;
+            
+            speak("Let's begin your breathing exercise. Follow the visual guide and listen to my voice instructions. Find a comfortable position and relax.");
+            
+            setTimeout(startBreathingCycle, 3000);
+            
+            breathingTimer = setInterval(() => {
+                breathingTime--;
+                updateBreathingDisplay();
+                
+                if (breathingTime <= 0) {
+                    completeBreathing();
+                }
+            }, 1000);
+        }
+
+        function startBreathingCycle() {
+            const circle = document.getElementById('breathingCircle');
+            const text = document.getElementById('breathingText');
+            const instructions = document.getElementById('breathingInstructions');
+            
+            let isInhaling = true;
+            
+            function cycle() {
+                if (!breathingRunning) return;
+                
+                if (isInhaling) {
+                    text.textContent = 'Inhale';
+                    instructions.textContent = 'Breathe in slowly through your nose...';
+                    circle.classList.remove('exhale');
+                    circle.classList.add('inhale');
+                    speak("Inhale slowly and deeply", 0.8);
+                } else {
+                    text.textContent = 'Exhale';
+                    instructions.textContent = 'Breathe out slowly through your mouth...';
+                    circle.classList.remove('inhale');
+                    circle.classList.add('exhale');
+                    speak("Exhale completely and relax", 0.8);
+                }
+                
+                isInhaling = !isInhaling;
+            }
+            
+            cycle(); // Start immediately
+            breathingCycle = setInterval(cycle, 4000); // 4 seconds per phase
+        }
+
+        function pauseBreathing() {
+            breathingRunning = false;
+            clearInterval(breathingTimer);
+            clearInterval(breathingCycle);
+            speechSynthesis.cancel();
+            document.getElementById('breathingStartBtn').disabled = false;
+            document.getElementById('breathingPauseBtn').disabled = true;
+            speak("Breathing exercise paused. Take your time.");
+        }
+
+        function resetBreathing() {
+            breathingRunning = false;
+            clearInterval(breathingTimer);
+            clearInterval(breathingCycle);
+            speechSynthesis.cancel();
+            breathingTime = 240;
+            updateBreathingDisplay();
+            
+            const circle = document.getElementById('breathingCircle');
+            const text = document.getElementById('breathingText');
+            const instructions = document.getElementById('breathingInstructions');
+            
+            circle.classList.remove('inhale', 'exhale');
+            text.textContent = 'Ready';
+            instructions.textContent = 'Click start to begin your breathing exercise with automatic voice guidance';
+            
+            document.getElementById('breathingStartBtn').disabled = false;
+            document.getElementById('breathingPauseBtn').disabled = true;
+        }
+
+        function completeBreathing() {
+            breathingRunning = false;
+            clearInterval(breathingTimer);
+            clearInterval(breathingCycle);
+            speechSynthesis.cancel();
+            
+            const sessions = parseInt(localStorage.getItem('breathingSessions')) || 0;
+            localStorage.setItem('breathingSessions', sessions + 1);
+            
+            updateStats();
+            
+            speak("Breathing exercise completed. You should feel more relaxed and centered now. Take a moment to notice how calm you feel.");
+            
+            alert('Breathing exercise completed! You should feel more relaxed now. 🧘‍♀️');
+            resetBreathing();
+        }
+
+        // Meditation Timer Functions
+        const meditationScripts = {
+            mindfulness: [
+                "Welcome to your mindfulness meditation. Find a comfortable position and close your eyes if you'd like.",
+                "Begin by taking three deep breaths. Inhale slowly through your nose... and exhale completely through your mouth.",
+                "Now, bring your attention to your natural breath. Notice the sensation of air entering and leaving your body.",
+                "When your mind wanders to thoughts, sounds, or sensations, gently acknowledge them without judgment.",
+                "Simply return your attention to your breath. This is the practice of mindfulness.",
+                "You are present in this moment. There is nowhere else you need to be.",
+                "Continue to breathe naturally, staying aware of each inhale and exhale.",
+                "If you notice tension in your body, breathe into those areas and let them soften.",
+                "You're doing wonderfully. Each moment of awareness is a gift to yourself.",
+                "As we near the end, take a moment to appreciate this time you've given yourself.",
+                "When you're ready, slowly open your eyes and return to your day with this sense of calm."
+            ],
+            'body-scan': [
+                "Welcome to your body scan meditation. Find a comfortable lying or sitting position.",
+                "Close your eyes and take a few deep breaths to settle into this moment.",
+                "Start by bringing your attention to the top of your head. Notice any sensations there.",
+                "Slowly move your awareness down to your forehead, around your eyes, and to your jaw.",
+                "Let any tension in your face simply melt away with each exhale.",
+                "Now focus on your neck and shoulders. Breathe into any tightness you find there.",
+                "Continue scanning down through your arms, noticing your upper arms, forearms, and hands.",
+                "Bring your attention to your chest and upper back. Feel your breath moving in this area.",
+                "Scan through your abdomen and lower back, breathing into any sensations you discover.",
+                "Move your awareness to your hips, thighs, and knees. Let everything soften and relax.",
+                "Finally, scan your calves, ankles, and feet. Feel completely relaxed from head to toe.",
+                "Take a moment to feel your whole body at once, completely relaxed and at peace."
+            ],
+            'stress-relief': [
+                "This meditation will help you release stress and find your natural state of calm.",
+                "Take a deep breath in, and as you exhale, imagine releasing any tension or worry.",
+                "With each breath out, let go of the stress from your day. You don't need to carry it.",
+                "Imagine stress leaving your body like dark clouds drifting away from a clear blue sky.",
+                "Picture yourself in a peaceful place where you feel completely safe and relaxed.",
+                "This might be a beach, a forest, or simply a cozy room. Make it vivid in your mind.",
+                "Allow this feeling of peace and safety to fill your entire being.",
+                "Notice how your body feels when you're truly relaxed. Remember this feeling.",
+                "You have the power to return to this calm state whenever you need it.",
+                "Stress is temporary, but your inner peace is always available to you.",
+                "Carry this sense of calm with you as you return to your day."
+            ],
+            focus: [
+                "This meditation will enhance your focus and concentration abilities.",
+                "Choose a single point of focus. This could be your breath, a word, or a mental image.",
+                "For the next few minutes, commit to keeping your attention on this one thing.",
+                "When your mind wanders, and it will, gently guide your attention back to your focus point.",
+                "Don't judge yourself for getting distracted. Simply return to your chosen focus.",
+                "Each time you notice your mind has wandered and bring it back, you strengthen your focus.",
+                "Think of this like training a muscle. Every return to focus makes you stronger.",
+                "Stay present with your chosen focus point. Let everything else fade into the background.",
+                "Notice how it feels to have a calm, focused mind. This is your natural state.",
+                "You can access this focused state whenever you need it in your daily life.",
+                "As we finish, appreciate the mental clarity and focus you've cultivated."
+            ]
+        };
+
+        function setMeditationTime(minutes) {
+            meditationTime = minutes * 60;
+            updateMeditationDisplay();
+        }
+
+        function updateMeditationDisplay() {
+            const minutes = Math.floor(meditationTime / 60);
+            const seconds = meditationTime % 60;
+            document.getElementById('meditationTimer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startGuidedMeditation(type, minutes) {
+            setMeditationTime(minutes);
+            currentMeditationType = type;
+            
+            speak(`${type.replace('-', ' ')} meditation selected for ${minutes} minutes. Click start when you're ready to begin.`);
+            
+            // Remove this line that was auto-starting:
+            // setTimeout(startMeditation, 3000);
+        }
+
+        function startMeditation() {
+            if (meditationTime <= 0) {
+                alert('Please set a meditation time first');
+                return;
+            }
+            
+            meditationRunning = true;
+            document.getElementById('meditationStartBtn').disabled = true;
+            document.getElementById('meditationPauseBtn').disabled = false;
+            
+            // Provide initial guidance
+            if (currentMeditationType) {
+                speak(`Starting your ${currentMeditationType.replace('-', ' ')} meditation. Find a comfortable position and close your eyes if you'd like.`);
+                
+                // Start guided meditation automatically after initial instruction
+                if (meditationScripts[currentMeditationType]) {
+                    setTimeout(startMeditationGuidance, 4000);
+                }
+            } else {
+                speak("Starting meditation session. Find a comfortable position and focus on your breath.");
+            }
+            
+            meditationTimer = setInterval(() => {
+                meditationTime--;
+                updateMeditationDisplay();
+                
+                if (meditationTime <= 0) {
+                    completeMeditation();
+                }
+            }, 1000);
+        }
+
+        function startMeditationGuidance() {
+            const script = meditationScripts[currentMeditationType];
+            let currentLine = 0;
+            const totalDuration = meditationTime;
+            const interval = Math.max(15, totalDuration / script.length); // At least 15 seconds between instructions
+            
+            // Speak first line immediately
+            if (script[currentLine]) {
+                speak(script[currentLine], 0.9);
+                currentLine++;
+            }
+            
+            meditationGuidance = setInterval(() => {
+                if (!meditationRunning || currentLine >= script.length) {
+                    clearInterval(meditationGuidance);
+                    return;
+                }
+                
+                speak(script[currentLine], 0.9);
+                currentLine++;
+            }, interval * 1000);
+        }
+
+        function pauseMeditation() {
+            meditationRunning = false;
+            clearInterval(meditationTimer);
+            clearInterval(meditationGuidance);
+            speechSynthesis.cancel();
+            document.getElementById('meditationStartBtn').disabled = false;
+            document.getElementById('meditationPauseBtn').disabled = true;
+            speak("Meditation paused. Take your time to rest.");
+        }
+
+        function resetMeditation() {
+            meditationRunning = false;
+            clearInterval(meditationTimer);
+            clearInterval(meditationGuidance);
+            speechSynthesis.cancel();
+            meditationTime = 300;
+            currentMeditationType = null;
+            updateMeditationDisplay();
+            document.getElementById('meditationStartBtn').disabled = false;
+            document.getElementById('meditationPauseBtn').disabled = true;
+        }
+
+        function completeMeditation() {
+            meditationRunning = false;
+            clearInterval(meditationTimer);
+            clearInterval(meditationGuidance);
+            speechSynthesis.cancel();
+            
+            const sessions = parseInt(localStorage.getItem('meditationSessions')) || 0;
+            localStorage.setItem('meditationSessions', sessions + 1);
+            
+            updateStats();
+            
+            speak("Meditation session completed. Take a moment to appreciate this peaceful feeling before returning to your day. You've given yourself a wonderful gift.");
+            
+            alert('Meditation session completed! Take a moment to appreciate this peaceful feeling. 🕯️');
+            resetMeditation();
+        }
+
+        // Desk Stretches Functions
+        const stretchInstructions = {
+            neck: "Gently roll your head in slow circles. Start by dropping your chin to your chest, then slowly roll to one side, back, and to the other side. Breathe deeply and move slowly to avoid strain.",
+            shoulder: "Lift your shoulders up toward your ears, hold for 3 seconds, then release and let them drop. Feel the tension melt away. Repeat this movement slowly and mindfully.",
+            wrist: "Extend your arms in front of you. Make slow circles with your wrists, first clockwise, then counterclockwise. This helps prevent repetitive strain injuries from typing.",
+            back: "Sit tall in your chair. Place your right hand on your left knee and gently twist your torso to the left. Hold and breathe deeply, then switch sides. Feel the stretch along your spine.",
+            chest: "Clasp your hands behind your back. Lift your chest and squeeze your shoulder blades together. This counters the hunched posture from desk work and opens your chest.",
+            hip: "While seated, pull your right knee up toward your chest. Hold and breathe deeply. Feel the stretch in your hip flexor. Switch legs and repeat on the other side."
+        };
+
+        const stretchVoiceInstructions = {
+            neck: [
+                "Let's begin the neck roll stretch. Sit up straight and relax your shoulders.",
+                "Slowly drop your chin toward your chest. Feel the gentle stretch in the back of your neck.",
+                "Now gently roll your head to the right side. Hold for a moment and breathe.",
+                "Continue rolling back, being very gentle with this movement. Never force it.",
+                "Roll to the left side and hold. Feel the stretch along the side of your neck.",
+                "Return to center and repeat in the opposite direction. Move slowly and breathe deeply."
+            ],
+            shoulder: [
+                "Time for shoulder shrugs. Sit comfortably with your arms at your sides.",
+                "Slowly lift your shoulders up toward your ears as high as you can.",
+                "Hold this position for three seconds. Feel the tension building in your shoulders.",
+                "Now release and let your shoulders drop completely. Feel the wonderful relief.",
+                "Repeat this movement. Lift up slowly, hold for three, and release.",
+                "Continue this pattern. Each release should feel more relaxing than the last."
+            ],
+            wrist: [
+                "Let's work on wrist circles. Extend both arms in front of you.",
+                "Make slow circles with your wrists, moving clockwise first.",
+                "Feel the gentle stretch through your wrists and forearms.",
+                "Now reverse direction and make circles counterclockwise.",
+                "This movement helps prevent strain from typing and mouse use.",
+                "Continue these gentle circles, keeping the movement smooth and controlled."
+            ],
+            back: [
+                "Time for a seated spinal twist. Sit tall with your feet flat on the floor.",
+                "Place your right hand on your left knee for support.",
+                "Slowly twist your torso to the left, looking over your left shoulder.",
+                "Hold this position and breathe deeply. Feel the stretch along your spine.",
+                "Now return to center and place your left hand on your right knee.",
+                "Twist to the right side and hold. Breathe into the stretch and relax."
+            ],
+            chest: [
+                "Let's open up your chest. Sit up straight and clasp your hands behind your back.",
+                "Slowly lift your chest and squeeze your shoulder blades together.",
+                "Feel the stretch across your chest and the front of your shoulders.",
+                "This stretch counters the forward posture from computer work.",
+                "Hold this position and breathe deeply into your chest.",
+                "Feel your chest opening and your posture improving with each breath."
+            ],
+            hip: [
+                "Time for hip flexor stretches. Remain seated in your chair.",
+                "Lift your right knee up toward your chest, using your hands to help.",
+                "Hold your knee gently and feel the stretch in your hip and lower back.",
+                "Breathe deeply and hold this position. Feel the tension releasing.",
+                "Now lower your right leg and lift your left knee toward your chest.",
+                "Hold and breathe. This stretch helps counter tight hips from sitting all day."
+            ]
+        };
+
+        function startStretch(type, duration) {
+            currentStretch = type;
+            stretchTime = duration;
+            
+            document.getElementById('stretchName').textContent = getStretchName(type);
+            document.getElementById('stretchInstructions').textContent = stretchInstructions[type];
+            document.getElementById('stretchGuide').style.display = 'block';
+            document.getElementById('stretchStartBtn').disabled = false;
+            
+            updateStretchDisplay();
+            
+            speak(`${getStretchName(type)} selected. This stretch will help relieve tension and improve your posture. Click start when you're ready to begin with voice guidance.`);
+        }
+
+        function getStretchName(type) {
+            const names = {
+                neck: 'Neck Rolls',
+                shoulder: 'Shoulder Shrugs',
+                wrist: 'Wrist Circles',
+                back: 'Seated Spinal Twist',
+                chest: 'Chest Opener',
+                hip: 'Hip Flexor Stretch'
+            };
+            return names[type] || 'Stretch';
+        }
+
+        function updateStretchDisplay() {
+            const minutes = Math.floor(stretchTime / 60);
+            const seconds = stretchTime % 60;
+            document.getElementById('stretchTimer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startStretchTimer() {
+            if (stretchTime <= 0) {
+                alert('Please select a stretch first');
+                return;
+            }
+            
+            stretchRunning = true;
+            document.getElementById('stretchStartBtn').disabled = true;
+            document.getElementById('stretchPauseBtn').disabled = false;
+            
+            speak(`Starting ${getStretchName(currentStretch)}. Listen carefully to the instructions and move slowly.`);
+            
+            if (currentStretch && stretchVoiceInstructions[currentStretch]) {
+                setTimeout(startStretchGuidance, 3000);
+            }
+            
+            stretchTimer = setInterval(() => {
+                stretchTime--;
+                updateStretchDisplay();
+                
+                if (stretchTime <= 0) {
+                    completeStretch();
+                }
+            }, 1000);
+        }
+
+        function startStretchGuidance() {
+            const instructions = stretchVoiceInstructions[currentStretch];
+            let currentInstruction = 0;
+            const interval = Math.max(8, stretchTime / instructions.length); // At least 8 seconds between instructions
+            
+            // Speak first instruction immediately
+            if (instructions[currentInstruction]) {
+                speak(instructions[currentInstruction], 0.9);
+                currentInstruction++;
+            }
+            
+            const guidanceInterval = setInterval(() => {
+                if (!stretchRunning || currentInstruction >= instructions.length) {
+                    clearInterval(guidanceInterval);
+                    return;
+                }
+                
+                speak(instructions[currentInstruction], 0.9);
+                currentInstruction++;
+            }, interval * 1000);
+        }
+
+        function pauseStretch() {
+            stretchRunning = false;
+            clearInterval(stretchTimer);
+            speechSynthesis.cancel();
+            document.getElementById('stretchStartBtn').disabled = false;
+            document.getElementById('stretchPauseBtn').disabled = true;
+            speak("Stretch paused. Take your time to rest.");
+        }
+
+        function resetStretch() {
+            stretchRunning = false;
+            clearInterval(stretchTimer);
+            speechSynthesis.cancel();
+            stretchTime = 0;
+            currentStretch = null;
+            document.getElementById('stretchGuide').style.display = 'none';
+            document.getElementById('stretchStartBtn').disabled = true;
+            document.getElementById('stretchPauseBtn').disabled = true;
+        }
+
+        function completeStretch() {
+            stretchRunning = false;
+            clearInterval(stretchTimer);
+            speechSynthesis.cancel();
+            
+            const sessions = parseInt(localStorage.getItem('stretchSessions')) || 0;
+            localStorage.setItem('stretchSessions', sessions + 1);
+            
+            updateStats();
+            
+            speak("Stretch completed! Your body should feel more relaxed and loose now. Great job taking care of your health!");
+            
+            alert('Stretch completed! Your body should feel more relaxed now. 🤸‍♀️');
+            resetStretch();
+        }
+
+        // Stats Functions
+        function updateStats() {
+            const totalTime = parseInt(localStorage.getItem('totalExerciseTime')) || 0;
+            const workoutSessions = parseInt(localStorage.getItem('workoutSessions')) || 0;
+            const breathingSessions = parseInt(localStorage.getItem('breathingSessions')) || 0;
+            const meditationSessions = parseInt(localStorage.getItem('meditationSessions')) || 0;
+            const stretchSessions = parseInt(localStorage.getItem('stretchSessions')) || 0;
+            
+            document.getElementById('totalWorkoutTime').textContent = Math.floor(totalTime / 60);
+            document.getElementById('workoutSessions').textContent = workoutSessions;
+            document.getElementById('breathingSessions').textContent = breathingSessions;
+            document.getElementById('meditationSessions').textContent = meditationSessions;
+            document.getElementById('stretchSessions').textContent = stretchSessions;
+        }
+
+        // Initialize everything when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded, initializing with automatic voice guidance...');
+            
+            // Initialize speech synthesis
+            initializeSpeech();
+            
+            // Initialize displays
+            updateWorkoutDisplay();
+            updateBreathingDisplay();
+            updateMeditationDisplay();
+            updateStats();
+            
+            console.log('Initialization complete - automatic voice guidance ready');
+        });
+           
+    </script>
+</body>
+</html>
