@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Posture Checker - HealthTech</title>
+<link rel="icon" type="image/x-icon" href="New Project (30).png">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
@@ -499,6 +500,85 @@
         font-weight: 400;
     }
 
+    /* Footer Styles */
+    footer {
+        background: rgba(26, 26, 46, 0.2);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 4rem;
+        padding: 3rem 0 2rem;
+    }
+
+    .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .footer-section h4 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(45deg, #00d4ff, #ff00ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .footer-section ul {
+        list-style: none;
+    }
+
+    .footer-section ul li {
+        margin-bottom: 0.5rem;
+    }
+
+    .footer-section ul li a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-weight: 400;
+    }
+
+    .footer-section ul li a:hover {
+        color: #00d4ff;
+        transform: translateX(5px);
+    }
+
+    .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 400;
+    }
+
+    .social-links {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .social-links a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+        background: linear-gradient(45deg, #00d4ff, #ff00ff);
+        transform: translateY(-2px);
+    }
+
     @media (max-width: 768px) {
         .nav-links {
             display: none;
@@ -522,6 +602,15 @@
 
         .video-container, .status-panel {
             padding: 2rem;
+        }
+
+        .footer-content {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+
+        .social-links {
+            justify-content: center;
         }
     }
 </style>
@@ -633,6 +722,54 @@
     <p>Loading AI pose detection model...</p>
     <small>This may take a few moments...</small>
 </div>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>HealthTech</h4>
+                <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6; font-weight: 400;">Your complete wellness companion powered by AI technology. Track, monitor, and transform your health journey with precision and style.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Health Tools</h4>
+                <ul>
+                    <li><a href="dashboard.html">Health Dashboard</a></li>
+                    <li><a href="posture-checker.html">Posture Checker</a></li>
+                    <li><a href="bmi-calculator.html">BMI Calculator</a></li>
+                    <li><a href="water-tracker.html">Water Tracker</a></li>
+                    <li><a href="exercise-timer.html">Exercise Timer</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Info</h4>
+                <ul>
+                    <li><a href="tel:+1-555-HEALTH">📞 +1 (555) HEALTH</a></li>
+                    <li><a href="mailto:info@healthtech.com">✉️ info@healthtech.com</a></li>
+                    <li><a href="#location">📍 123 Wellness Ave, Health City, HC 12345</a></li>
+                    <li><a href="#hours">🕒 Mon-Fri: 9AM-6PM PST</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="https://www.who.int/">World Health Organization</a></li>
+                        <li><a href="https://www.efsa.europa.eu">EFSA</a></li>
+                        <li><a href="https://www.cdc.gov">CDC</a></li>
+                        <li><a href="https://eupha.org">EUPHA</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="social-links">
+                <a href="#facebook" aria-label="Facebook">📘</a>
+                <a href="#twitter" aria-label="Twitter">🐦</a>
+                <a href="#instagram" aria-label="Instagram">📷</a>
+                <a href="#linkedin" aria-label="LinkedIn">💼</a>
+            </div>
+            <p>&copy; 2024 HealthTech. All rights reserved. Made with ❤️ for your wellness journey.</p>
+        </div>
+    </div>
+</footer>
 
 <script>
     class PostureChecker {
@@ -1091,5 +1228,6 @@
         new PostureChecker();
     });
 </script>
+</body>
 </body>
 </html>
